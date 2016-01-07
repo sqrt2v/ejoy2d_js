@@ -50,16 +50,17 @@ ejoy2d.sprite_trans.prototype = ((function() {
             this.additive = a.additive;
             this.program = a.program;
         },
-        mul: function(a, b) {
+        mul: function(a, b, output) {
             this.copyFrom(a);
             if (!b) {
                 return this;
             }
             if (!this.mat) {
-                this.mat = b.mat.clone();
+                this.mat = b.mat?b.mat.clone() : new ejoy2d.matrix();
             } else if (b.mat) {
                 this.mat.mul(this.mat, b.mat);
             }
+
             if (this.color == 0xffffffff) {
                 this.color = b.color;
             } else if (b.color != 0xffffffff) {

@@ -55,7 +55,6 @@ var ex01 =((function(){
 						var w = Math.floor(aabb[2] - aabb[0]);
 						var h = Math.floor(aabb[3] - aabb[1]);
 						var aabbStr = "AABB:" + w.toString() + "x" + h.toString();
-						console.log("---->>> aabb:", aabbStr);
 						label.setText(aabbStr);
 
 						isInited = true;

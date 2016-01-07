@@ -6,7 +6,6 @@ var SCREEN_SCALE = 16;
 
 ejoy2d.screen = ((function(){
     var trans_tmp = new Array(2);
-    var log_cnt = 4;
     return {
         init_render:function(r) {
             // for ejoy2d compatibility, ejoy2d may call screen_init before screen_initrender

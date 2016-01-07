@@ -54,7 +54,7 @@ ejoy2d.geometry = (function(){
             	var base = i*4;
                 vp[base +2] = 0;
                 vp[base +3] = 0;
-        		var rlt = ej_screen.trans(vp[base +0], vp[base +1]);
+        		var rlt = ejoy2d.screen.trans(vp[base +0], vp[base +1]);
           	    vp[base +0] = rlt[0];
                 vp[base +1] = rlt[1];
             }
@@ -86,7 +86,7 @@ ejoy2d.geometry = (function(){
                 var base = i*4;
                 vp[base +2] = 0;
                 vp[base +3] = 0;
-                var rlt = ej_screen.trans(vp[base +0], vp[base +1]);
+                var rlt = ejoy2d.screen.trans(vp[base +0], vp[base +1]);
                 vp[base +0] = rlt[0];
                 vp[base +1] = rlt[1];
             }
@@ -107,7 +107,7 @@ ejoy2d.geometry = (function(){
                 var vx = vs[i*2] * SCREEN_SCALE;
                 var vy = vs[i*2+1] * SCREEN_SCALE;
                 //console.log("------<>>>>>", i ,vs[i*2], vs[i*2 +1]);
-                var rlt = ej_screen.trans(vx,vy);
+                var rlt = ejoy2d.screen.trans(vx,vy);
                 vb[i*4] = rlt[0];
                 vb[i*4+1] = rlt[1];
                 vb[i*4+2] = 0;

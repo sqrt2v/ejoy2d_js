@@ -4,16 +4,17 @@
 
 var EJMAT_R_FACTOR = 4096.0;
 
+var _I = [1024, 0, 0, 1024, 0, 0];
+
 ejoy2d.matrix = function(mat){
     this.m = new Int32Array(6);
-    if(mat)
-    {
+    if(mat) {
         for(var i = 0; i < 6; ++i) {
             this.m[i] = mat[i];
         }
-    }
-    else
+    } else {
         this.identity();
+    }
 };
 
 
@@ -29,15 +30,27 @@ ejoy2d.matrix.prototype = {
         m[4] = (m1[4] * m2[0] + m1[5] * m2[2]) /1024 + m2[4];
         m[5] = (m1[4] * m2[1] + m1[5] * m2[3]) /1024 + m2[5];
     },
-    identity : function() {
-        var mat = this.m;
-        mat[0] = 1024;
-        mat[1] = 0;
-        mat[2] = 0;
-        mat[3] = 1024;
-        mat[4] = 0;
-        mat[5] = 0;
+    identity : function(output) {
+        this.m[0] = 1024;
+        this.m[1] = 0;
+        this.m[2] = 0;
+        this.m[3] = 1024;
+        this.m[4] = 0;
+        this.m[5] = 0;
+        if(output)
+            console.log(this, this.m)
     },
+    make_identity : function(output) {
+        this.m[0] = 10;
+        this.m[1] = 0;
+        this.m[2] = 0;
+        this.m[3] = 0;
+        this.m[4] = 0;
+        this.m[5] = 0;
+        if(output)
+            console.log(this, this.m)
+    },
+
 
     _inverse_scale:function(m , o) {
         var m = this.m;
@@ -260,6 +273,3 @@ ejoy2d.matrix.prototype = {
     }
     //////////////////end of API ////////////////
 };
-
-ejoy2d.matrix.IdentifyMat = new ejoy2d.matrix();
-

@@ -47,8 +47,8 @@ function init(canvas) {
 
     //render.init();
 
-    ex04.init();
-    _G.game = new ejoy2d.game(ex04);
+    ex05.init();
+    _G.game = new ejoy2d.game(ex05);
 
 
     ////////// dealing with user input

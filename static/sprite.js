@@ -9,38 +9,28 @@ var SPRFLAG_MESSAGE = 2;
 var SPRFLAG_MULTIMOUNT = 4;
 var SPRFLAG_FORCE_INHERIT_FRAME = 8;
 
-
-// var log_cnt = 0;
-// var frame_cnt = 0;
-// var child_cnt =0;
+var log_cnt =0;
+var do_output = false;
 
 ejoy2d.sprite = function(pack, id) {
     // var id = pack.getIDByName(name);
-    // console.log("--->> create sprite with id:", id);
     if (id == ANCHOR_ID) {
         this.initAsAnchor(id);
 		return;
     }
     this.init(pack, id);
-    // var output = id == 19;
     var i = 0;
     while(true) {
-        //if(output)
-        //    console.log("------>> TRY create index child:", i, this.component(i));
 		var childId = this.component(i);
 		if ( childId == null )
 			break;
-        //if(output)
-        //    console.log("------>> create child with id:", childId);
 		var c = new ejoy2d.sprite(pack, childId);
 		if (c != null) {
             c.name = this.childname(i);
-			this.mount(i, c);
+            this.mount(i, c);
             c.update_message(pack, id, i, this.frame);
 		}
          ++i;
-        //if(output)
-        //    console.log("<<<---- end of child:", childId);
     }
 };
 var tv = new Array(10); /// for tmp vertex
@@ -51,7 +41,6 @@ var tmpMatrix = new ejoy2d.matrix();
 ejoy2d.sprite.prototype = (function () {
     
     
-    var aabb_cnt = 0;
     //////////////////// util function //////////////////////////
     /// aabb
     function poly_aabb(n, point, srt, ts, aabb) {
@@ -63,11 +52,6 @@ ejoy2d.sprite.prototype = (function () {
         }
         mat.srt(srt);
         var m = mat.m;
-        
-                        console.trace();
-        console.log("--->>>", m);
-        console.log(n, point);
-        console.log(srt, ts)
                 
         for (var i=0;i<n;i++) {
             var x = point[i*2];
@@ -84,15 +68,6 @@ ejoy2d.sprite.prototype = (function () {
                 aabb[1] = yy;
             if (yy > aabb[3])
                 aabb[3] = yy;
-                
-            if(aabb_cnt < 5) {
-
-                console.log(i);
-
-                console.log("----??? aabb", aabb, xx, yy);
-                aabb_cnt++;
-            }
-            
         }
     };
 
@@ -178,13 +153,6 @@ ejoy2d.sprite.prototype = (function () {
             tmp.srt(srt);
             var m = tmp.m;
     
-            // if(log_cnt > 0)
-            // {
-            //     console.log("---->>>>>>>", m[0], m[1], m[2], m[3], m[4], m[5]);
-            //     log_cnt --;
-            // }
-    
-            //console.log("------------- ttt");
             var i =0, j =0;
             for (i=0;i< picture.n;i++) {
                 var q = picture.rect[i];
@@ -208,12 +176,6 @@ ejoy2d.sprite.prototype = (function () {
                     vb[j*4+1] = vy; // yy/1024/2 - 0.8;
                     vb[j*4+2] = tx;
                     vb[j*4+3] = ty;
-    
-                    // if(log_cnt > 0)
-                    // {
-                    //     console.log("---->>>>>>>",picture.id, tx, ty);
-                    //     log_cnt --;
-                    // }
                 }
                 ejoy2d.shader.do_draw(vb, arg.color, arg.additive);
             }
@@ -361,11 +323,11 @@ ejoy2d.sprite.prototype = (function () {
             }
             return f;
         },
-        child:function(childname) {
+        child : function(childname) {
             if (this.type != SpriteType.animation)
                 return -1;
             var ani = this.s.ani;
-            for (var i=0;i<ani.component.length;i++) {
+            for (var i=0; i < ani.component.length; i++) {
                 var name = ani.component[i].name;
                 if (name && name == childname) {
                     return i;
@@ -395,8 +357,6 @@ ejoy2d.sprite.prototype = (function () {
         },
     
         mat_mul:function(a, b, tmp) {
-            // console.trace();
-            // console.log(a, b, tmp)
             if (!b)
                 return a;
             if (!a)
@@ -457,7 +417,7 @@ ejoy2d.sprite.prototype = (function () {
             } else {
                 r = arg.mat.clone();
             }
-                r.srt(srt);
+            r.srt(srt);
         },
     
         label_pos:function(m, l, pos) {
@@ -514,20 +474,22 @@ ejoy2d.sprite.prototype = (function () {
     
     
         draw_child:function(srt, ts, material) {
-            // if(frame_cnt == 1)
-            // {
-            //     console.log("-------->> draw child");
-            // }
-            // child_cnt += 1;
-            var tmp = new ejoy2d.sprite_trans();
-            tmp.mat = new ejoy2d.matrix();
-            var t = tmp.mul(this.t, ts);
+            var tmpTrans = new ejoy2d.sprite_trans();
+            // mat.make_identity();
+            // tmpTrans.mat = mat;
+            //tmpTrans.mat.make_identity(do_output);
+            if(do_output)
+            {
+                console.log(this.t)
+                console.log(tmpTrans)
+            }
             
-            // if(log_cnt < 5)
-            // {
-            //     console.log("-->>", log_cnt, t);
-            //     log_cnt++;
-            // }
+            var t = tmpTrans.mul(this.t, ts, do_output);
+
+            if(do_output) {
+                do_output = false;
+                console.log("---->>>> output 1111", this.t, ts, this.type);
+            }
             
             if (this.material) {
                 material = this.material;
@@ -572,39 +534,26 @@ ejoy2d.sprite.prototype = (function () {
                     return 0;
             }
     
-            // if(child_cnt == 4)
-            // {
-            //     console.log("----------->>> <<<<<<<<<<<_------------------------ aoaooaoaoao 4 draw child");
-            // }
-    
             // draw animation
             var ani = this.s.ani;
             var fi = this.real_frame() + this.start_frame;
             var frame = ani.frame[fi];
     
             var scissor = 0;
-            // console.log("--->>> draw:", frame.length);
             for (var i=0;i< frame.length;i++) {
                 var f = frame[i];
                 var index = f.component_id;
-                // console.log("------>>> draw child:", i, index);
                 var child = this.data.children[index];
-                // if(child_cnt == 4)
-                // {
-                //     console.log("------.>> st", f.component_id);
-                // }
                 if ((!child) || (!child.visible)) {
                     continue;
                 }
                 var tmp2 = new ejoy2d.sprite_trans();
-                
-                // console.log("==>>>", f.t);
+                if(index == 19 && log_cnt <1) {
+                    console.log("---->>> frame:", f);
+                    log_cnt ++;
+                    do_output = true;  
+                }
                 var ct = tmp2.mul(f.t, t);
-                // if(child_cnt < 5)
-                // {
-                //     var mt = ct.mat.m;
-                //     console.log("DRAD CHILD -<><>>", mt[0], mt[1], mt[2], mt[3], mt[4], mt[5]);
-                // }
                 scissor += child.draw_child(srt, ct, material);
             }
             for (var i=0;i<scissor;i++) {
@@ -629,11 +578,6 @@ ejoy2d.sprite.prototype = (function () {
         },
     
         draw:function(srt) {
-            // if(frame_cnt < 2)
-            // {
-            //     frame_cnt = frame_cnt +1;
-            //     console.log("----------------------------->>>frame cnt:", frame_cnt);
-            // }
             if (this.visible) {
                 this.draw_child(srt);
             }
@@ -1055,7 +999,6 @@ ejoy2d.sprite.prototype = (function () {
             console.assert(arg1 != undefined);
             var m = this.mat;
             if(!this.t.mat) {
-                console.log("---->>>>> ps: not t.mat");
                 m.identity();
                 this.t.mat = m;
             }

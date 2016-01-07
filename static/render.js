@@ -867,6 +867,7 @@ ejoy2d.render =(function() {
         },
 
         setscissor: function (x, y, width, height) {
+            console.log("------------->>>> enable scissors", x, y, width, height)
             gl.scissor(x, y, width, height);
         },
 

@@ -449,25 +449,27 @@ var textFS = "\
             this.program(BuiltinProgram.picture, null);
             this.texture(texid, 0);
 
-            var cnt = vb.length;
-            for (var i=0;i<cnt;i+=4) {
-                var idx = i*4;
-                var vx = vb[idx];
-                var vy = vb[idx +1];
-                var tx = vb[idx +2];
-                var ty = vb[idx +3];
+            var cnt = vb.length/4;
+            var vbb = [];
+            for (var i=0;i<cnt;i++) {
+                var idx = i*2;
+                var tx = vb[idx];
+                var ty = vb[idx +1];
+                var vx = vb[idx + cnt*2];
+                var vy = vb[idx + cnt*2 +1];
                 var tmp = ejoy2d.screen.trans(vx,vy);
-                vb[idx] = tmp[0] + 1.0;
-                vb[idx +1] = tmp[1] - 1.0;
+                var idx2 = i*4;
+                vbb[idx2] = tmp[0] + 1.0;
+                vbb[idx2 +1] = tmp[1] - 1.0;
 
                 tmp = texture.texcoord(tex, tx, ty);
-                vb[idx +2] = tmp[0];
-                vb[idx +3] = tmp[1];
+                vbb[idx2 +2] = tmp[0];
+                vbb[idx2 +3] = tmp[1];
             }
-            if (cnt == 16) {
-                this.do_draw(vb, color, additive);
+            if (cnt == 4) {
+                this.do_draw(vbb, color, additive);
             } else {
-                this.drawpolygon(point, vb, color, additive);
+                this.drawpolygon(cnt, vbb, color, additive);
             }
             return false;
         },
