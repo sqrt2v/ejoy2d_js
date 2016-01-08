@@ -51,10 +51,6 @@ var ex05 =((function(){
                         var idx = turret.child("anchor");
                         console.log(idx);
                         turret.mount(idx, label);
-
-
-						//obj.ps(100, 0);
-						//obj.ps(1.2);
 						isInited = true;
 					}
 				});
@@ -65,7 +61,7 @@ var ex05 =((function(){
 		},
 		logicFrame:function() {
 			if(isInited) {
-				turret.setframe(35, false);
+				turret.setframe(turret.frame +1, false);
 			}
 		},
 		draw:function(){

@@ -32,6 +32,14 @@ ejoy2d.sprite = function(pack, id) {
 		}
          ++i;
     }
+    // Object.defineProperty(this, "frame1", {
+    //     set:function(f) {
+    //         this.setframe(f);
+    //     },
+    //     get : function() {
+    //         return this.frame;
+    //     }
+    // });
 };
 var tv = new Array(10); /// for tmp vertex
 /// draw_child中使用的临时变量
@@ -548,11 +556,6 @@ ejoy2d.sprite.prototype = (function () {
                     continue;
                 }
                 var tmp2 = new ejoy2d.sprite_trans();
-                if(index == 19 && log_cnt <1) {
-                    console.log("---->>> frame:", f);
-                    log_cnt ++;
-                    do_output = true;  
-                }
                 var ct = tmp2.mul(f.t, t);
                 scissor += child.draw_child(srt, ct, material);
             }
@@ -1053,7 +1056,6 @@ ejoy2d.sprite.prototype = (function () {
             }
             m.sr(sx, sy, rot);
         },
-        
         /************************* end of transform ********************************/
     
         // --------------------- API -----------------------///

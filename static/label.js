@@ -173,7 +173,6 @@ ejoy2d.label = (function() {
     	return ctx;
     };
 
-    var mc = 0;
     function draw_utf8(unicode, cx, cy, size, srt, color, arg, edge) {
     	var rect = dfont.lookup(unicode, FONT_SIZE, edge);
         // if(log_cnt <= 1)
@@ -301,13 +300,6 @@ ejoy2d.label = (function() {
             dfont = null;
         },
         draw :function (rich, l, srt, arg) {
-            if(mc < 400) {
-                if(mc % 97 == 0) {
-                    console.log("---->>>", arg);
-                }
-                mc ++;
-            }
-        
         	ejoy2d.shader.texture(tex, 0);
             var color = ejoy2d.label.get_color(l, arg);
             var str = rich.text;

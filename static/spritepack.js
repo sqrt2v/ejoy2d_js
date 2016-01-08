@@ -15,6 +15,7 @@ ejoy2d.spritepack = function(json, texs)  {
     this.data = data;
     var namedCmp = {};
     this.namedCmp = namedCmp;
+    var allMatrix = null;
     for(var i in json) {
         var v = json[i];
         var cmp = {};
@@ -37,7 +38,7 @@ ejoy2d.spritepack = function(json, texs)  {
             cmp.scissor = v[4];
             break;
         case SpriteType.matrix:
-            // console.log("------>>> matrix");
+            allMatrix = v;
             break;
         case SpriteType.picture:
             cmp.id = v[1];
@@ -90,14 +91,10 @@ ejoy2d.spritepack = function(json, texs)  {
                     } else {
                         f.component_id = f1[0];
                         f.t = new ejoy2d.sprite_trans();
-                        f.t.mat = new ejoy2d.matrix(f1[1]);
-                        if(f1[2])
-                            f.touchable = true; 
-                        //if(uu == 60)
-                        //{
-                        //    var m = f.t.mat.m;
-                        //    console.log("------->>>>>>--------->", m[0], m[1], m[2], m[3], m[4], m[5] );
-                        //}
+                        if(typeof(f1[1]) == "number")
+                            f.t.mat = new ejoy2d.matrix(allMatrix[f1[1] +1]); 
+                        else
+                            f.t.mat = new ejoy2d.matrix(f1[1]);
                         f.touchable = f1[2];
                     }
                     oneFrame[ii] = f;
