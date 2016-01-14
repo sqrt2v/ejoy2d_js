@@ -1,6 +1,6 @@
 local json = require('json')
 
-local f = ...
+local f, o = ...
 
 print('---->>> input f:', f)
 
@@ -91,7 +91,7 @@ for k,v in pairs(data) do
     rlt[k] = t
 end
 
-local of = io.open('out.json', 'a')
+local of = io.open(o..'.json', 'w')
 of:write(json.encode(rlt))
 of:close()
 
