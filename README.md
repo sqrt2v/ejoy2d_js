@@ -38,8 +38,18 @@ and you can build with (assumed the current directory is $GOPATH)
 
  `go build ejoy2d_js
 
- ./ejoy2d.js  ./src/ejoy2d_js (pass the repo path to the program, to find the assets, js, html etc)
-  `
- - 
+ ./ejoy2d.js  ./src/ejoy2d_js (pass the repo path to the program, to find the assets, js, html etc)`
+
+ then you can open browser
+
+ - localhost:9528/ex01.html
+ - localhost:9528/ex02.html
+ - localhost:9528/ex04.html
+ - localhost:9528/ex05.html
+
+ all samle files are located in sample fold.
+
+ enjoy
+ feel free to contact me via email
 
  
