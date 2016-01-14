@@ -2,6 +2,7 @@ package main
 
 // import "io"
 import (
+	"flag"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -11,9 +12,19 @@ import (
 	"strings"
 )
 
+var resRoot string
+
 func main() {
+	flag.Parse()
+	resRoot = flag.Arg(0)
+	if flag.NArg() < 1 {
+		log.Fatal("Error! should pass res root as parameter")
+		return
+	}
+	fmt.Println("--------------123")
+	fmt.Println(resRoot)
 	http.HandleFunc("/", handleExample)
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":9527", nil)
 	if err != nil {
 		log.Fatal("fatel: listen and serve", err)
 	}
@@ -30,13 +41,13 @@ func handleExample(w http.ResponseWriter, r *http.Request) {
 
 	switch t {
 	case ".js":
-		handleAsset("text/javascript", "./src/lib/"+path, w)
+		handleAsset("text/javascript", resRoot+"lib/"+path, w)
 	case ".json":
-		handleAsset("application/json", "./src/sample/"+path, w)
+		handleAsset("application/json", resRoot+"sample/"+path, w)
 	case ".png":
-		handleAsset("image/x-png", "./src/sample/"+path, w)
+		handleAsset("image/x-png", resRoot+"sample/"+path, w)
 	case ".html":
-		handleHtml("./src/sample/"+path, w)
+		handleHtml(resRoot+"/sample/"+path, w)
 	default:
 	}
 
