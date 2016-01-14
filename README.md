@@ -47,9 +47,11 @@ and you can build with (assumed the current directory is $GOPATH)
  - localhost:9528/ex04.html
  - localhost:9528/ex05.html
 
- all samle files are located in sample fold.
 
- enjoy
- feel free to contact me via email
+all samle files are located in sample fold.
+
+enjoy
+
+feel free to contact me via email
 
  
